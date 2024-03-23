@@ -22,5 +22,6 @@ Route::get('/', function () {
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
-Route::get('manager/dashboard', [NoteController::class, 'dashboard'])->name('dashboard');
+Route::get('manager/dashboard', [NoteController::class, 'index'])->name('dashboard');
 Route::get('manager/logout', [AuthController::class, 'logout'])->name('logout');
+Route::resource('notes', NoteController::class);
