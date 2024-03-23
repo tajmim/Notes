@@ -240,13 +240,16 @@
                                             class="btn btn-sm btn-secondary text-white">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="" class="btn btn-sm btn-info text-white">
+                                        <a data-bs-toggle="modal" data-bs-target="#editNoteModal{{ $note->id }}"
+                                            class="btn btn-sm btn-info text-white">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="d-inline">
-                                            @csrf 
-                                            @method('DELETE') 
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                        <form action="{{ route('notes.destroy', $note->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -288,8 +291,7 @@
                         </div>
                         <div class="form-group">
                             <label for="desc_note">Note Details</label>
-                            <input type="text" class="form-control summernote" id="desc_note"
-                                placeholder="Note Details" name="desc">
+                            <textarea class="form-control summernote" id="desc_note" placeholder="Note Details" name="desc"></textarea>
 
                         </div>
 
@@ -331,7 +333,53 @@
                 </div>
             </div>
         </div>
+        {{-- update note modal --}}
+        <div class="modal fade" id="editNoteModal{{ $note->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modalTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            Edit Note
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createNoteForm" action="{{ route('notes.update', $note->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Note Title</label>
+                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="Note Title" name="title"
+                                    value="{{ $note->title }}">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="desc_note">Note Details</label>
+                                <textarea class="form-control summernote" id="desc_note" placeholder="Note Details" name="desc">{{ $note->content }}</textarea>
+
+
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endforeach
 
     <script></script>
+@endsection
+
+
+@section('js_code')
 @endsection

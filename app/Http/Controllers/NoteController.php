@@ -45,7 +45,7 @@ class NoteController extends Controller
         $note->created_by = Auth::user()->id;
         $note->save();
 
-       return redirect()->back();
+       return redirect()->back()->with('message','Note Created Successfully');
     }
 
     /**
@@ -79,7 +79,10 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+       $note->title = $request->title;
+       $note->content = $request->desc;
+       $note->save();
+       return redirect()->back()->with('message','Note Updated Successfully');
     }
 
     /**
@@ -91,6 +94,6 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         $note->delete();
-        return redirect()->back();
+        return redirect()->back()->with('message','Note Deleted Successfully');
     }
 }

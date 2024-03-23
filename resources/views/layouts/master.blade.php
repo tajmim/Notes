@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('assets/main.css') }}">
 
+    <!-- ToastrJS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
     <!-- Summernote CSS -->
@@ -43,7 +45,7 @@
             aria-label="Search">
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
-                <a class="nav-link px-3" href="#">Sign out</a>
+                <a class="nav-link px-3" href="{{route('logout')}}">Sign out</a>
             </div>
         </div>
     </header>
@@ -116,6 +118,8 @@
     </script> --}}
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <!-- ToastrJS JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         // Initialize datepicker
@@ -134,14 +138,33 @@
             });
 
         });
-
-        $('#createNoteForm').on('submit', function(e) {
-            var noteContent = $('.summernote').summernote('code');
-            $('#desc_note').val(noteContent);
-        });
     </script>
+    @if (session('message'))
+        <script>
+            // Correctly format the PHP string for JavaScript
+            console.log({!! json_encode(session('message')) !!});
+            toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+            toastr.success({!! json_encode(session('message')) !!});
+        </script>
+    @endif
 
-
+    @yield('js_code')
 
 
 
