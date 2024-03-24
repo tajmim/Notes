@@ -22,6 +22,10 @@ Route::get('/', function () {
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
-Route::get('dashboard', [NoteController::class, 'index'])->name('dashboard');
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-Route::resource('notes', NoteController::class);
+
+Route::middleware(['islogin'])->group(function () {
+    Route::get('dashboard', [NoteController::class, 'index'])->name('dashboard');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::resource('notes', NoteController::class);
+});
+

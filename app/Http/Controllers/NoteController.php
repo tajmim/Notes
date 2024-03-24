@@ -14,11 +14,18 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     
-    public function index()
+
+    public function index(Request $request)
     {
-        $notes = Note::all();
-        return view('dashboard', compact('notes'));
+        $notes = Note::where('created_by', auth()->user()->id);
+        $q = null;
+        if (isset ($request->q)) {
+            $q = $request->q;
+            $notes = $notes->where('title', 'like', '%' . $request->q . '%')->orWhere('content', 'like', '%' . $request->q . '%');
+        }
+
+        $notes = $notes->get();
+        return view('dashboard', compact('notes' , 'q'));
     }
 
     /**
@@ -45,7 +52,7 @@ class NoteController extends Controller
         $note->created_by = Auth::user()->id;
         $note->save();
 
-       return redirect()->back()->with('message','Note Created Successfully');
+        return redirect()->back()->with('message', 'Note Created Successfully');
     }
 
     /**
@@ -79,10 +86,10 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-       $note->title = $request->title;
-       $note->content = $request->desc;
-       $note->save();
-       return redirect()->back()->with('message','Note Updated Successfully');
+        $note->title = $request->title;
+        $note->content = $request->desc;
+        $note->save();
+        return redirect()->back()->with('message', 'Note Updated Successfully');
     }
 
     /**
@@ -94,6 +101,6 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         $note->delete();
-        return redirect()->back()->with('message','Note Deleted Successfully');
+        return redirect()->back()->with('message', 'Note Deleted Successfully');
     }
 }
